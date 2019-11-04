@@ -11,41 +11,45 @@ class Solution {
     //right COL 1 to Col. Length-2 -- Row: 1 
     //down row 1 to row.length-2 -- COL: col.length-2
     //left col.length - 2 to col 1
-    int[] res = new int [inputMatrix.length*inputMatrix[0].length];
-    int r=0; 
-    int c=0;
-    int dir = 0; 
+    int numRows = inputMatrix.length;
+    int numCols = inputMatrix[0].length;
+    int[] res = new int [numRows*numCols];
     int written = 0;
-    while(written<res.length*res.length){
-      //RIGHT
-      for(;c<inputMatrix[0].length; c++){
-        res[written] = inputMatrix[r][c];
+    int topRow=0; 
+    int bottomRow=numRows-1;
+    int leftCol = 0; 
+    int rightCol = numCols-1;
+    while(topRow<=bottomRow && leftCol<=rightCol){
+      //RIGHT. TOP ROW
+      for(int i=leftCol;i<=rightCol; i++){
+        res[written] = inputMatrix[topRow][i];
         written++;
       }
-      r+=1;
-      //DOWN
-      for(;r<inputMatrix.length; r++){
-        res[written] = inputMatrix[r][c];
-        written++;
-      }
-      c-=1;
-      //LEFT 
-      for(;c>=0; c--){
-        res[written] = inputMatrix[r][c];
-        written++;
-      }
-      r-=1;
+      topRow++; //top row is one down
       
-      //UP
-      for(;r>=1; r++){
-        res[written] = inputMatrix[r][c];
+      //DOWN. COPY RIGHTEST COLUMN
+      for(int i=topRow; i<=bottomRow; i++){
+        res[written] = inputMatrix[i][rightCol];
         written++;
+      }
+      rightCol--;
+      //LEFT. BOTTOM ROW COPY 
+      if(topRow<=bottomRow){ //**WHY ARE THESE IF STATEMENTS NECESSARY??
+        for(int i= rightCol; i>=leftCol; i--){
+          res[written] = inputMatrix[bottomRow][i]; 
+          written++;
+        }
+        bottomRow--;
+      }
+      
+      //UP. LEFTMOST COLUMN
+      if(leftCol<=rightCol){ //**WHY ARE THESE IF STATEMENTS NECESSARY??
+        for(int i=bottomRow; i>=topRow; i--){
+          res[written] = inputMatrix[i][leftCol];
+          written++;
+        }
+        leftCol++;
       }
     }
     return res;
   }
-
-  public static void main(String[] args) {
-    //System.out.println()
-  }
-}
